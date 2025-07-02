@@ -23,16 +23,19 @@ export class CreateMovieDto {
   description: string;
 
   @ApiProperty({ example: 2010, })
+  @Type(() => Number)
   @IsNotEmpty()
   @IsNumber()
   release_year: number;
 
   @ApiProperty({ example: 148,})
+  @Type(() => Number)
   @IsNotEmpty()
   @IsNumber()
   duration_minutes: number;
 
   @ApiProperty({ example: 8.8,  })
+  @Type(() => Number)
   @IsNotEmpty()
   @IsNumber()
   rating: number;
@@ -52,22 +55,22 @@ export class CreateMovieDto {
 
 export class MovieQueryDto {
 
-  @ApiPropertyOptional({ example: 1, })
+  @ApiProperty({ example: 1, })
   @IsOptional()
   @Type(() => Number)
   page?: number;
 
-  @ApiPropertyOptional({ example: 10 })
+  @ApiProperty({ example: 10 })
   @IsOptional()
   @Type(() => Number)
   limit?: number;
 
-  @ApiPropertyOptional({ example: 'avatar'})
+  @ApiProperty({ example: 'avatar'})
   @IsOptional()
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ example: 'free', })
+  @ApiProperty({ example: 'free', })
   @IsOptional()
   @IsEnum(['free', 'premium'])
   subscription_type?: 'free' | 'premium';

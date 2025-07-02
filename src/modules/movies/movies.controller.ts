@@ -1,6 +1,10 @@
-import { Controller, Get, Post, Body, Delete, Param, UploadedFile, UseInterceptors, UnsupportedMediaTypeException, Query, UseGuards } from "@nestjs/common";
+import {
+  Controller, Get, Post, Body, Delete, Param,
+  UploadedFile, UseInterceptors, UnsupportedMediaTypeException,
+  Query, UseGuards
+} from "@nestjs/common";
 import { MoviesService } from "./movies.service";
-import { CreateMovieDto, MovieQueryDto } from "./dto/create-movie.dto";
+import { CreateMovieDto } from "./dto/create-movie.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
@@ -10,10 +14,9 @@ import { UserRole } from "src/core/types/user";
 import { Roles } from "src/core/decorators/roles.decorator";
 import { AuthGuard } from "src/core/guards/jwt-guard";
 import { RolesGuard } from "src/core/guards/role-guard";
-import { ApiBearerAuth } from "@nestjs/swagger";
-import { ApiTags } from "@nestjs/swagger";
-import { ApiConsumes } from "@nestjs/swagger";
-import { ApiBody } from "@nestjs/swagger";
+import {
+  ApiBearerAuth, ApiTags, ApiConsumes, ApiBody
+} from "@nestjs/swagger";
 
 @ApiBearerAuth()
 @ApiTags("Movies")
@@ -29,56 +32,51 @@ export class MoviesController {
       storage: diskStorage({
         destination: "./uploads/posters",
         filename: (req, file, cb) => {
-          const postername = uuidv4() + extname(file.originalname);
-          cb(null, postername);
-        }
+          const filename = uuidv4() + extname(file.originalname);
+          cb(null, filename);
+        },
       }),
       fileFilter: (req, file, cb) => {
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-        // @ts-ignore
         if (!allowedTypes.includes(file.mimetype)) {
           return cb(
-            new UnsupportedMediaTypeException("type jpeg, jpg yoki png bo'lishi kerak"),
+            new UnsupportedMediaTypeException("Fayl turi jpeg, jpg yoki png bo'lishi kerak."),
             false
           );
         }
         cb(null, true);
-      }
+      },
     })
   )
   @ApiConsumes("multipart/form-data")
   @ApiBody({
     schema: {
-      type: "object",
+      type: 'object',
       properties: {
-        poster: {
-          type: "string",
-          format: "binary"
+        poster: { type: 'string', format: 'binary' },
+        title: { type: 'string' },
+        slug: { type: 'string' },
+        description: { type: 'string' },
+        release_year: { type: 'number' },
+        duration_minutes: { type: 'number' },
+        rating: { type: 'number' },
+        subscription_type: {
+          type: 'string',
+          enum: ['free', 'premium']
         },
-        title: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        release_date: {
-          type: "string",
-          format: "date"
-        },
-        duration: {
-          type: "number"
-        },
-        age_limit: {
-          type: "string"
-        },
-        country: {
-          type: "string"
-        }
+        created_by: { type: 'string', format: 'uuid' }
       },
-      required: ["title", "description", "poster"]
+      required: [
+        'poster', 'title', 'slug', 'description',
+        'release_year', 'duration_minutes', 'rating',
+        'subscription_type', 'created_by'
+      ]
     }
   })
-  async create(@Body() createMovieDto: CreateMovieDto, @UploadedFile() poster: Express.Multer.File) {
+  async create(
+    @Body() createMovieDto: CreateMovieDto,
+    @UploadedFile() poster: Express.Multer.File
+  ) {
     const poster_url = poster.filename;
     return this.moviesService.create(createMovieDto, poster_url);
   }
@@ -100,7 +98,7 @@ export class MoviesController {
   @Delete("delete/:id")
   @Roles(UserRole.SuperAdmin, UserRole.Admin, UserRole.User)
   @UseGuards(AuthGuard, RolesGuard)
-  remowe(@Param("id") id: string) {
+  remove(@Param("id") id: string) {
     return this.moviesService.remove(id);
   }
 }

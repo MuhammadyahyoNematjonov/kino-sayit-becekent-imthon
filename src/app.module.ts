@@ -69,6 +69,7 @@ import { join } from 'path';
             rejectUnauthorized: false,
           },
         },
+        logging: false
       }),
     }),
 

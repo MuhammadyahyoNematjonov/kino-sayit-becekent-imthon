@@ -1,44 +1,44 @@
 import { IsNotEmpty, IsString, IsNumber, IsEnum } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { subscriptionType } from 'src/core/types/user';
 
 export class UpdateMovieDto {
-  @ApiPropertyOptional({ example: 'Avatar 1' })
+  @ApiProperty({ example: 'Avatar 1' })
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @ApiPropertyOptional({ example: 'avatar-2' })
+  @ApiProperty({ example: 'avatar-2' })
   @IsNotEmpty()
   @IsString()
   slug: string;
 
-  @ApiPropertyOptional({ example: 'Pandora sayyorasiga qaytish haqidagi film.' })
+  @ApiProperty({ example: 'Pandora sayyorasiga qaytish haqidagi film.' })
   @IsNotEmpty()
   @IsString()
   description: string;
 
-  @ApiPropertyOptional({ example: 2023 })
+  @ApiProperty({ example: 2023 })
   @IsNotEmpty()
   @IsNumber()
   release_year: number;
 
-  @ApiPropertyOptional({ example: 195 })
+  @ApiProperty({ example: 195 })
   @IsNotEmpty()
   @IsNumber()
   duration_minutes: number;
 
-  @ApiPropertyOptional({ example: 9.2 })
+  @ApiProperty({ example: 9.2 })
   @IsNotEmpty()
   @IsNumber()
   rating: number;
 
-  @ApiPropertyOptional({ example: 'premium' })
+  @ApiProperty({ example: 'premium' })
   @IsNotEmpty()
   @IsEnum(subscriptionType)
   subscription_type: subscriptionType;
 
-  @ApiPropertyOptional({ example: 'user_id' })
+  @ApiProperty({ example: 'user_id' })
   @IsNotEmpty()
   @IsString()
   created_by: string;
